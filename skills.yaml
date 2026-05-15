@@ -1,0 +1,115 @@
+version: "1.0"
+
+agent_name: "Universal Procurement Agent"
+default_language: "cs-CZ"
+repository_type: "skills-library"
+
+principles:
+  - "Skills are universal and employer-independent."
+  - "Company-specific context belongs only in company-profiles."
+  - "The agent must separate facts, assumptions, risks and recommendations."
+  - "The agent must not invent supplier prices, commercial terms or compliance status."
+
+global_files:
+  system_principles: "global/SYSTEM_PRINCIPLES.md"
+  output_formats: "global/OUTPUT_FORMATS.md"
+  safety_rules: "global/SAFETY_RULES.md"
+  procurement_terms: "global/PROCUREMENT_TERMS.md"
+
+company_profiles:
+  template: "company-profiles/template-company-profile.md"
+  current: "company-profiles/current-employer-profile.md"
+
+skills:
+  - id: "rfq-rfp"
+    name: "RFQ / RFP Preparation"
+    path: "skills/rfq-rfp/SKILL.md"
+    triggers:
+      - "rfq"
+      - "rfp"
+      - "poptávka"
+      - "výběrové řízení"
+      - "dodavatelská nabídka"
+      - "tendr"
+    output_types:
+      - "rfq_email"
+      - "supplier_response_matrix"
+      - "evaluation_criteria"
+
+  - id: "quotation-comparison"
+    name: "Supplier Quotation Comparison"
+    path: "skills/quotation-comparison/SKILL.md"
+    triggers:
+      - "porovnej nabídky"
+      - "cenové srovnání"
+      - "nabídky dodavatelů"
+      - "supplier comparison"
+      - "quotation"
+      - "cenová nabídka"
+    output_types:
+      - "comparison_table"
+      - "risk_summary"
+      - "recommendation"
+
+  - id: "tco-analysis"
+    name: "Total Cost of Ownership Analysis"
+    path: "skills/tco-analysis/SKILL.md"
+    triggers:
+      - "tco"
+      - "celkové náklady"
+      - "landed cost"
+      - "doprava"
+      - "fx"
+      - "měnový kurz"
+      - "objemový scénář"
+    output_types:
+      - "calculation"
+      - "scenario_analysis"
+      - "management_summary"
+
+  - id: "negotiation-brief"
+    name: "Supplier Negotiation Brief"
+    path: "skills/negotiation-brief/SKILL.md"
+    triggers:
+      - "vyjednávání"
+      - "argumenty"
+      - "cílová cena"
+      - "batna"
+      - "kontrakt"
+      - "sleva"
+      - "negotiation"
+    output_types:
+      - "brief"
+      - "talking_points"
+      - "email_draft"
+
+  - id: "category-strategy"
+    name: "Procurement Category Strategy"
+    path: "skills/category-strategy/SKILL.md"
+    triggers:
+      - "strategie kategorie"
+      - "category strategy"
+      - "dodavatelský mix"
+      - "spend"
+      - "rizika dodavatelů"
+      - "nákupní strategie"
+    output_types:
+      - "category_strategy"
+      - "supplier_mix"
+      - "roadmap"
+
+  - id: "management-reporting"
+    name: "Management Procurement Reporting"
+    path: "skills/management-reporting/SKILL.md"
+    triggers:
+      - "management"
+      - "board"
+      - "report"
+      - "měsíční přehled"
+      - "úspory"
+      - "rizika"
+      - "prezentace"
+    output_types:
+      - "executive_summary"
+      - "monthly_report"
+      - "dashboard_text"
