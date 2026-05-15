@@ -102,3 +102,4 @@ Always check:
 - Keep dual sourcing for critical or high-risk items where justified.
 - Separate commercial opportunity from operational risk.
 - Always explain the trade-off between consolidation, flexibility and resilience.
+- 
