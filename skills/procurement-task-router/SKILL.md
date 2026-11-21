@@ -453,6 +453,24 @@ Use:
 4. Negotiation Brief
 5. Supplier Counterproposal for the supplier letters
 
+## Output layer routing (tiers)
+
+Decide the tier before answering (full rules in `global/OUTPUT_FORMATS.md` → Output layers):
+
+| Tier | Typical tasks | Layers |
+|---|---|---|
+| 1 | single e-mail, quick question, clause check, short brief | text |
+| 2 | quotation comparison, TCO, spend, allocation, transport cost, rebate / productivity scenarios, scorecard | text + Excel |
+| 3 | orange / red disruption, management reporting, decision needing management approval, user asks for dashboard / visual | text + Excel + visual summary (Excel Procurement Dashboard → Decision summary mode) |
+
+- State the tier in one line at the top of the answer.
+- Longer outputs always start with the "Na 30 sekund" block.
+- On tier 2 and 3 build the Excel first and take all numbers from it.
+- Tier 1 and 2 end with a one-line offer of the next layer.
+- The user's explicit wish ("jen text", "přidej dashboard") always wins.
+
+The tier (how many layers) is independent of the output mode below (how much detail in the text).
+
 ## Output mode routing
 
 Use the correct output level:
@@ -525,6 +543,7 @@ If data is incomplete:
 
 Unless a more specific skill requires otherwise, use:
 
+0. Na 30 sekund (for longer outputs)
 1. Shrnutí
 2. Použité skilly
 3. Vstupní data

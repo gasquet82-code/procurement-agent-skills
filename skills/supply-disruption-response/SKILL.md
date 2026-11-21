@@ -118,8 +118,11 @@ After the disruption is stabilized, recommend:
 
 Use Czech by default.
 
+Output tier: yellow = tier 1 or 2, orange and red = tier 3 (text + Excel + visual summary), see `global/OUTPUT_FORMATS.md`.
+
 Return this structure:
 
+0. Na 30 sekund
 1. Shrnutí situace
 2. Typ narušení a úroveň závažnosti
 3. Fakta vs. předpoklady (časová osa)
@@ -141,3 +144,6 @@ Return this structure:
 - Keep supplier communication professional and factual, without blame language.
 - Do not make binding commitments on behalf of the buyer or the company.
 - Document the timeline of events for later claims and supplier evaluation.
+- Check every key date against the calendar: weekends and public holidays at the supplier, the carrier and our site. Flag dates that fall on a weekend and plan inspection and dispatch on working days.
+- Customer communication about an alternative or unapproved source goes out only after (1) quality release and (2) a check that the customer contract allows a change of source without approval. Until then, inform the customer about the plan and the date, not the source.
+- Keep messages consistent: the internal summary, the supplier e-mail and the customer e-mail must state the same position (e.g. "price increase not accepted in this form, under negotiation" – not "rejected" in one place and "open to indexation" in another).

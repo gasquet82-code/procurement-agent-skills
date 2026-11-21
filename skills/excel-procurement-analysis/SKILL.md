@@ -70,6 +70,9 @@ If available, collect:
 
 ## Output format
 
+When the analysis is the Excel layer of a tier 2 or tier 3 output, build the workbook in the standard structure from `global/OUTPUT_FORMATS.md` → Layer 2 (Souhrn, Vstupy, Výpočty, Varianty, Předpoklady, Akce) with live formulas, and take all numbers in the text from it.
+
+
 Use Czech by default.
 
 Return this structure:

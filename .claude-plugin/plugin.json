@@ -1,6 +1,6 @@
 {
   "name": "procurement-agent",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Universal procurement agent (Nestor) — skills for RFQ/RFP, supplier comparison, TCO, negotiation, contract review, supplier scorecards, spend baseline, supply disruption response, transport mode selection, order consolidation, supplier productivity and rebates, management reporting and Excel-based dashboards. Defaults to Czech, employer-portable.",
   "author": { "name": "Ondro Gasquet" },
   "homepage": "https://github.com/gasquet82-code/procurement-agent-skills",
