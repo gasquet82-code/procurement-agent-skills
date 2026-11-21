@@ -45,6 +45,18 @@ Chci standardní procurement review s riziky, chybějícími údaji, doporučen�
 
 ## 3. Úrovně výstupu
 
+### Vrstvy výstupu (od verze 0.3.0)
+
+Agent podle typu úkolu sám zvolí, kolik vrstev výstupu připraví:
+
+| Úroveň | Kdy | Co dostaneš |
+|---|---|---|
+| 1 | e-mail, rychlá otázka, kontrola klauzule | text |
+| 2 | porovnání nabídek, TCO, spend, alokace, doprava, bonus, produktivita | text + Excel s výpočty |
+| 3 | oranžová/červená krize, report pro vedení, rozhodnutí ke schválení | text + Excel + jednostránkový vizuální souhrn (HTML) |
+
+Delší výstupy vždy začínají blokem **„Na 30 sekund“** (verdikt, 3 kroky na dnes, klíčové číslo, hlavní riziko, kdo rozhoduje). Méně zkušený kolega si přečte jen tento blok. Čísla v textu, Excelu i souhrnu pocházejí z jednoho Excelu. Vždy můžeš říct „jen text“ nebo „přidej dashboard“.
+
 Agent podporuje tři úrovně výstupu.
 
 ### Short / stručně

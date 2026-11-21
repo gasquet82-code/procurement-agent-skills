@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rozhodovací souhrn</title>
+<!--
+  Decision summary template (procurement agent, tier 3 visual layer).
+  HOW TO USE: replace only the DATA object below. Every number must come
+  from the Excel layer. No external libraries, works offline, prints on A4.
+-->
+<script>
+const DATA = {
+  title: "NK-220: Kovotvar nestíhá PO 4500123",
+  subtitle: "Agrotech Servis s.r.o. · fiktivní testovací scénář",
+  date: "23. 11. 2026",
+  severity: "red",            // green | yellow | orange | red
+  severityLabel: "Červená",
+  tier: "Úroveň 3 · text + Excel + vizuální souhrn",
+  source: "NK-220_zpozdeni_2026-11-23.xlsx",
+  thirtySeconds: {
+    verdict: "Dodavatel posouvá 400 ks o 3 týdny. Doporučuji doplnit 200 ks od Dökümu dedikovaným kamionem a dílčí dodávku 120 ks od Kovotvaru.",
+    today: [
+      "Objednat 200 ks u Dökümu a nechat si písemně potvrdit zásobu (nákup, po 23. 11.)",
+      "Zajistit dočasné uvolnění šarže od kvality (kvalita, út 24. 11.)",
+      "Odeslat Kovotvaru odpověď: termín nepřijímáme, dílčí dodávka bez příplatku (nákup, dnes)"
+    ],
+    keyNumber: "Čistý náklad řešení ~86 tis. Kč proti ohroženým tržbám 3,8 mil. Kč",
+    risk: "Döküm nemá uzavřený PPAP – díly jen po uvolnění kvality a vstupní kontrole.",
+    decides: "Nákup + kvalita, informovat vedení a obchod"
+  },
+  kpis: [
+    { label: "Ohrožené tržby", value: "3,8 mil. Kč", note: "4 zakázky", tone: "bad" },
+    { label: "Mezera do 10. 12.", value: "−165 ks", note: "bez zásahu", tone: "bad" },
+    { label: "Náklad doporučené varianty", value: "86 tis. Kč", note: "po odečtení pokuty", tone: "neutral" },
+    { label: "Penále Z1 bez zásahu", value: "108 tis. Kč", note: "18 dní × 6 tis. Kč", tone: "warn" },
+    { label: "Zakázky včas (var. B)", value: "4 / 4", note: "Z3 limituje jiný díl", tone: "good" }
+  ],
+  variants: {
+    unit: "tis. Kč",
+    items: [
+      { name: "A · jen Kovotvar", cost: 26, outcome: "Z1 o 2 dny, Z2 o 9 dní později", risk: "Ztráta dealera Z2 (1,6 mil.)", recommended: false },
+      { name: "B · Kovotvar + Döküm, dedikovaný kamion", cost: 115, outcome: "Všechny zakázky včas", risk: "Neschválený dodavatel – nutné uvolnění kvality", recommended: true },
+      { name: "C · Kovotvar + Döküm, sběrná přeprava", cost: 77, outcome: "Z1 nejisté (0–2 dny)", risk: "Málo času na vstupní kontrolu", recommended: false }
+    ]
+  },
+  timeline: [
+    { date: "po 23. 11.", text: "Objednávka Döküm, booking kamionu" },
+    { date: "út 24. 11.", text: "Nakládka TR, odpověď Kovotvaru do 12:00" },
+    { date: "so 28. 11.", text: "Příjezd kamionu a TS-5 (víkend!)", flag: true },
+    { date: "po 30. 11.", text: "Vstupní kontrola" },
+    { date: "út 1. 12.", text: "Expedice Z1", milestone: true },
+    { date: "10. 12.", text: "Expedice Z2", milestone: true },
+    { date: "12. 12.", text: "Čepy ČP-12 → expedice Z3", milestone: true }
+  ],
+  actions: [
+    { step: "Objednávka 200 ks u Dökümu + potvrzení zásoby", owner: "Nákup", due: "23. 11.", status: "open" },
+    { step: "Dočasné uvolnění šarže, atesty 3.1", owner: "Kvalita", due: "24. 11.", status: "open" },
+    { step: "Odpověď Kovotvaru (termín, příplatek, zdražení)", owner: "Nákup", due: "23. 11.", status: "open" },
+    { step: "Ověřit smlouvu Z1 – změna zdroje", owner: "Obchod", due: "24. 11.", status: "open" },
+    { step: "Informovat Z1 o plánu a termínu", owner: "Obchod", due: "po uvolnění", status: "wait" }
+  ],
+  risks: [
+    "Döküm mezitím prodá skladovou zásobu.",
+    "Chybějící doklad A.TR → clo.",
+    "Kovotvar posune i 16. 12.",
+    "TS-5 nedorazí 28. 11. → Z1 se zpozdí bez ohledu na NK-220."
+  ]
+};
+</script>
+<style>
+:root{
+  --bg:#f6f7f9; --card:#ffffff; --ink:#16202b; --muted:#5b6876; --line:#e3e7ec;
+  --accent:#1f5fbf; --accent-soft:#e8f0fb;
+  --good:#1e7f4f; --warn:#b26a00; --bad:#b3261e;
+  --sev-green:#1e7f4f; --sev-yellow:#b08a00; --sev-orange:#c25e00; --sev-red:#b3261e;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f141a; --card:#171e26; --ink:#e7edf3; --muted:#9aa7b4; --line:#26313c;
+    --accent:#6aa3ff; --accent-soft:#1a2a42;
+    --good:#4cc38a; --warn:#f0a840; --bad:#ff7b72;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 -apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+.wrap{max-width:1100px;margin:0 auto;padding:24px 16px 40px}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start;justify-content:space-between;margin-bottom:16px}
+h1{font-size:24px;line-height:1.25;margin:0 0 4px}
+.sub{color:var(--muted);font-size:13px}
+.badges{display:flex;gap:8px;flex-wrap:wrap}
+.badge{padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid var(--line);background:var(--card)}
+.sev{color:#fff;border:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 10px}
+.t30{border-left:5px solid var(--accent)}
+.verdict{font-size:18px;font-weight:600;margin:0 0 10px}
+.t30 ol{margin:4px 0 10px;padding-left:20px}
+.t30 dl{display:grid;grid-template-columns:max-content 1fr;gap:4px 12px;margin:0}
+.t30 dt{color:var(--muted)} .t30 dd{margin:0;font-weight:500}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:14px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.kpi .l{font-size:12px;color:var(--muted)} .kpi .v{font-size:22px;font-weight:700;margin:2px 0}
+.kpi .n{font-size:12px;color:var(--muted)}
+.kpi.good .v{color:var(--good)} .kpi.warn .v{color:var(--warn)} .kpi.bad .v{color:var(--bad)}
+.grid2{display:grid;grid-template-columns:1.3fr 1fr;gap:14px}
+.var{padding:10px 0;border-top:1px solid var(--line)} .var:first-of-type{border-top:0}
+.var .top{display:flex;justify-content:space-between;gap:8px;font-weight:600}
+.bar{height:10px;border-radius:6px;background:var(--line);margin:6px 0}
+.bar i{display:block;height:100%;border-radius:6px;background:var(--muted)}
+.var.rec .bar i{background:var(--accent)}
+.rec-tag{font-size:11px;background:var(--accent-soft);color:var(--accent);padding:2px 8px;border-radius:999px;margin-left:6px}
+.var .meta{font-size:13px;color:var(--muted)}
+.tl{list-style:none;margin:0;padding:0}
+.tl li{display:grid;grid-template-columns:92px 1fr;gap:10px;padding:6px 0;border-top:1px solid var(--line);font-size:14px}
+.tl li:first-child{border-top:0}
+.tl .d{color:var(--muted);font-variant-numeric:tabular-nums}
+.tl .ms{font-weight:600} .tl .fl{color:var(--warn);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:7px 6px;border-top:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:12px;border-top:0}
+.st{font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
+.st.done{color:var(--good)} .st.open{color:var(--accent)} .st.wait{color:var(--warn)}
+.risks{margin:0;padding-left:18px} .risks li{margin:3px 0}
+footer{color:var(--muted);font-size:12px;margin-top:8px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr} .t30 dl{grid-template-columns:1fr} h1{font-size:20px}}
+@media print{body{background:#fff} .card,.kpi{break-inside:avoid} .wrap{padding:0}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+(function(){
+  const D = DATA, esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const sevColor = {green:"var(--sev-green)",yellow:"var(--sev-yellow)",orange:"var(--sev-orange)",red:"var(--sev-red)"}[D.severity] || "var(--muted)";
+  const t = D.thirtySeconds || {};
+  const maxCost = Math.max(1, ...((D.variants && D.variants.items) || []).map(v => +v.cost || 0));
+  const stLabel = {done:"hotovo", open:"otevřené", wait:"čeká"};
+  document.title = D.title || "Rozhodovací souhrn";
+  document.getElementById("app").innerHTML = `
+  <header>
+    <div><h1>${esc(D.title)}</h1><div class="sub">${esc(D.subtitle)} · ${esc(D.date)}</div></div>
+    <div class="badges">
+      ${D.severityLabel ? `<span class="badge sev" style="background:${sevColor}">Závažnost: ${esc(D.severityLabel)}</span>` : ""}
+      ${D.tier ? `<span class="badge">${esc(D.tier)}</span>` : ""}
+    </div>
+  </header>
+  <section class="card t30">
+    <h2>Na 30 sekund</h2>
+    <p class="verdict">${esc(t.verdict)}</p>
+    ${(t.today||[]).length ? `<div class="sub">Udělej dnes</div><ol>${t.today.map(x=>`<li>${esc(x)}</li>`).join("")}</ol>` : ""}
+    <dl>
+      ${t.keyNumber ? `<dt>Klíčové číslo</dt><dd>${esc(t.keyNumber)}</dd>` : ""}
+      ${t.risk ? `<dt>Hlavní riziko</dt><dd>${esc(t.risk)}</dd>` : ""}
+      ${t.decides ? `<dt>Rozhoduje</dt><dd>${esc(t.decides)}</dd>` : ""}
+    </dl>
+  </section>
+  <section class="kpis">${(D.kpis||[]).map(k=>`<div class="kpi ${esc(k.tone)}"><div class="l">${esc(k.label)}</div><div class="v">${esc(k.value)}</div><div class="n">${esc(k.note)}</div></div>`).join("")}</section>
+  <div class="grid2">
+    <section class="card"><h2>Varianty – přímé náklady (${esc(D.variants && D.variants.unit)})</h2>
+      ${((D.variants&&D.variants.items)||[]).map(v=>`<div class="var ${v.recommended?"rec":""}">
+        <div class="top"><span>${esc(v.name)}${v.recommended?'<span class="rec-tag">doporučeno</span>':""}</span><span>${esc(v.cost)}</span></div>
+        <div class="bar"><i style="width:${Math.round((+v.cost||0)/maxCost*100)}%"></i></div>
+        <div class="meta">${esc(v.outcome)}${v.risk?" · Riziko: "+esc(v.risk):""}</div></div>`).join("")}
+    </section>
+    <section class="card"><h2>Klíčová data</h2>
+      <ul class="tl">${(D.timeline||[]).map(x=>`<li><span class="d">${esc(x.date)}</span><span class="${x.milestone?"ms":""} ${x.flag?"fl":""}">${esc(x.text)}</span></li>`).join("")}</ul>
+    </section>
+  </div>
+  <div class="grid2">
+    <section class="card"><h2>Akce</h2>
+      <table><thead><tr><th>Krok</th><th>Kdo</th><th>Termín</th><th>Stav</th></tr></thead><tbody>
+      ${(D.actions||[]).map(a=>`<tr><td>${esc(a.step)}</td><td>${esc(a.owner)}</td><td>${esc(a.due)}</td><td><span class="st ${esc(a.status)}">${esc(stLabel[a.status]||a.status)}</span></td></tr>`).join("")}
+      </tbody></table>
+    </section>
+    <section class="card"><h2>Hlavní rizika</h2><ul class="risks">${(D.risks||[]).map(r=>`<li>${esc(r)}</li>`).join("")}</ul></section>
+  </div>
+  <footer>Čísla převzata z: ${esc(D.source)} · Připraveno procurement agentem, rozhoduje člověk.</footer>`;
+})();
+</script>
+</body>
+</html>

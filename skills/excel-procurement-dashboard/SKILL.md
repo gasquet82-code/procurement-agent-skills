@@ -1,6 +1,6 @@
 ---
 name: excel-procurement-dashboard
-description: Use this skill when the user's request involves excel procurement dashboard. Trigger phrases include: "dashboard", "html dashboard", "interactive dashboard", "interaktivní dashboard", "vizualizace dat", "spend dashboard", "savings tracker dashboard", "rfq dashboard", "supplier scorecard dashboard", "contract coverage dashboard", "procurement kpi", "management dashboard". Produces a self-contained HTML dashboard with drag-and-drop Excel/CSV upload and client-side visualizations.
+description: Use this skill when the user's request involves excel procurement dashboard. Trigger phrases include: "dashboard", "html dashboard", "interactive dashboard", "interaktivní dashboard", "vizualizace dat", "spend dashboard", "savings tracker dashboard", "rfq dashboard", "supplier scorecard dashboard", "contract coverage dashboard", "procurement kpi", "management dashboard", "vizuální souhrn", "rozhodovací souhrn", "souhrn pro vedení". Produces either a reusable HTML dashboard with Excel/CSV upload, or a one-page decision summary (visual layer of a tier 3 output).
 ---
 
 # Skill: Excel Procurement Dashboard
@@ -9,6 +9,27 @@ description: Use this skill when the user's request involves excel procurement d
 This skill helps the procurement agent generate an interactive HTML dashboard from Excel-based procurement data.
 The dashboard runs fully in the browser, allows the user to upload an Excel or CSV file and visualizes the data without sending it anywhere.
 The goal is to provide a reusable, self-contained dashboard for spend data, RFQ comparison, supplier scorecards, savings trackers, price lists, contract coverage and other procurement use cases.
+
+## Two modes
+
+| Mode | Purpose | Template | Data |
+|---|---|---|---|
+| A – Upload dashboard | reusable tool: the user uploads Excel/CSV and explores it | `dashboard_template.html` | loaded at runtime, never embedded |
+| B – Decision summary | visual layer of a tier 3 output (see `global/OUTPUT_FORMATS.md`): one page for fast understanding of one situation or decision | `decision_summary_template.html` | the agent's own analysis results, embedded in the `DATA` object |
+
+Choose mode B automatically when the output is tier 3 (orange/red disruption, management reporting, decision needing approval) or the user asks for a "vizuální souhrn" / "souhrn pro vedení" of a specific analysis. Choose mode A when the user wants a tool to explore their own data files.
+
+### Mode B – Decision summary
+
+1. Build the Excel layer first; every number in the summary comes from it.
+2. Copy `decision_summary_template.html` and replace only the `DATA` object at the top (title, severity, "Na 30 sekund", 3–6 KPI cards, variants with cost, timeline, actions, risks, source file name). Do not change the rendering code.
+3. Keep it to one screen / one A4 page: max. 6 KPIs, max. 4 variants, max. 8 timeline items, max. 6 actions, max. 5 risks.
+4. Mark weekend or holiday dates in the timeline with `flag: true`.
+5. Never include personal data or confidential supplier prices unless the user explicitly asks; prefer totals and deltas.
+6. File name: `<téma>_souhrn_<YYYY-MM-DD>.html`.
+7. Run the consistency check from `global/OUTPUT_FORMATS.md` before delivering.
+
+The rest of this skill describes mode A.
 
 ## When to use
 Use this skill when the user asks for:
@@ -161,7 +182,7 @@ Before generating the dashboard, confirm:
 | Sensitive data | Whether the file contains personal or commercially sensitive data |
 
 ## Rules
-- Do not embed the user's data in the HTML — the dashboard must accept upload at runtime.
+- Mode A: do not embed the user's data in the HTML — the dashboard must accept upload at runtime. (Mode B embeds only the agent's summarized results.)
 - Do not send data to any server; all processing must stay in the browser.
 - Do not display savings without a defined baseline.
 - Do not compare prices without checking unit, currency, Incoterms and technical scope.
