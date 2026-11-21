@@ -429,3 +429,27 @@ skills:
       - "rebate_vs_discount"
       - "contract_clause_points"
       - "rebate_tracking"
+
+  - id: "procurement-foundation"
+    name: "Procurement Foundation"
+    path: "skills/procurement-foundation/SKILL.md"
+    triggers:
+      - "procurement"
+      - "nákup"
+      - "sourcing"
+    output_types:
+      - "principles"
+      - "safety_rules"
+      - "output_formats"
+
+  - id: "excel-procurement-dashboard"
+    name: "Excel Procurement Dashboard"
+    path: "skills/excel-procurement-dashboard/SKILL.md"
+    triggers:
+      - "dashboard"
+      - "interaktivní dashboard"
+      - "spend dashboard"
+      - "savings tracker dashboard"
+      - "procurement kpi"
+    output_types:
+      - "html_dashboard"

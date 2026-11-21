@@ -1,3 +1,8 @@
+---
+name: transport-mode-selection
+description: "Use when choosing a transport mode or deciding whether to expedite a late or urgent shipment. Trigger phrases: \"doprava\", \"způsob dopravy\", \"kontejner\", \"paletová přeprava\", \"expres\", \"letecká doprava\", \"air freight\", \"expedite\"."
+---
+
 # Skill: Transport Mode Selection
 
 ## Purpose

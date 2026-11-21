@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Procurement Dashboard</title>
+
+  <!-- Grid.js styling -->
+  <link href="https://cdn.jsdelivr.net/npm/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --panel: #ffffff;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --border: #e5e7eb;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --good: #16a34a;
+      --warn: #d97706;
+      --bad: #dc2626;
+      --shadow: 0 1px 2px rgba(15,23,42,.04), 0 6px 24px rgba(15,23,42,.06);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", "Helvetica Neue", Arial, sans-serif; font-size: 14px; }
+    a { color: var(--accent); text-decoration: none; }
+    h1, h2, h3 { margin: 0; font-weight: 600; }
+    h1 { font-size: 20px; letter-spacing: -0.01em; }
+    h2 { font-size: 15px; color: var(--ink); }
+    h3 { font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+    .container { max-width: 1440px; margin: 0 auto; padding: 24px; }
+    header.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+    header.top .brand { display: flex; align-items: center; gap: 12px; }
+    header.top .logo { width: 32px; height: 32px; border-radius: 8px; background: var(--accent); display: grid; place-items: center; color: white; font-weight: 700; }
+    header.top .meta { color: var(--muted); font-size: 12px; }
+    .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow); padding: 16px; }
+    .panel + .panel { margin-top: 16px; }
+    .row { display: grid; gap: 16px; }
+    .row.kpi { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+    .row.charts { grid-template-columns: 2fr 1fr; }
+    @media (max-width: 1024px) { .row.charts { grid-template-columns: 1fr; } }
+
+    /* Upload area */
+    .drop {
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      text-align: center;
+      background: #fafbff;
+      transition: border-color .15s ease, background .15s ease;
+      cursor: pointer;
+    }
+    .drop.dragover { border-color: var(--accent); background: var(--accent-soft); }
+    .drop p { margin: 4px 0; color: var(--muted); }
+    .drop strong { color: var(--ink); }
+    .drop .hint { font-size: 12px; }
+    .drop input[type=file] { display: none; }
+
+    /* Toolbar */
+    .toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; }
+    .toolbar .field { display: flex; flex-direction: column; gap: 4px; min-width: 160px; }
+    .toolbar label { font-size: 12px; color: var(--muted); }
+    .toolbar select, .toolbar input { padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; background: white; font-size: 13px; min-height: 36px; }
+    .toolbar select:focus, .toolbar input:focus { outline: 2px solid var(--accent-soft); border-color: var(--accent); }
+    .toolbar .pill {
+      padding: 4px 10px; border-radius: 999px;
+      background: var(--accent-soft); color: var(--accent);
+      font-size: 12px; font-weight: 600;
+    }
+
+    /* KPI */
+    .kpi-card { padding: 14px 16px; }
+    .kpi-card .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+    .kpi-card .value { font-size: 22px; font-weight: 700; margin-top: 4px; letter-spacing: -.01em; word-break: break-word; }
+    .kpi-card .sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    /* Chart canvases */
+    .chart-wrap { position: relative; height: 320px; }
+    .chart-wrap.small { height: 280px; }
+
+    /* Column inspector */
+    .cols { display: flex; flex-wrap: wrap; gap: 6px; }
+    .col-chip { font-size: 12px; padding: 4px 10px; border-radius: 999px; background: #f1f5f9; border: 1px solid var(--border); color: var(--ink); }
+    .col-chip .type { color: var(--muted); margin-left: 6px; font-variant: small-caps; }
+    .col-chip.num { background: #ecfeff; border-color: #cffafe; }
+    .col-chip.date { background: #fef3c7; border-color: #fde68a; }
+    .col-chip.text { background: #f1f5f9; }
+
+    /* Empty / errors */
+    .empty { color: var(--muted); padding: 40px 0; text-align: center; }
+    .error { color: var(--bad); padding: 8px 12px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; }
+
+    /* Grid.js polish */
+    .gridjs-wrapper { box-shadow: none !important; }
+    .gridjs-search-input { min-width: 220px !important; }
+    .gridjs-table { font-size: 13px; }
+
+    .hidden { display: none !important; }
+    .muted { color: var(--muted); }
+    .right { margin-left: auto; }
+    button.btn {
+      padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border); background: white; color: var(--ink);
+      cursor: pointer; font-size: 13px;
+    }
+    button.btn.primary { background: var(--accent); color: white; border-color: var(--accent); }
+    button.btn:hover { background: #f8fafc; }
+    button.btn.primary:hover { background: #1d4ed8; }
+
+    footer { color: var(--muted); font-size: 12px; padding: 12px 0; text-align: center; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <header class="top">
+    <div class="brand">
+      <div class="logo">P</div>
+      <div>
+        <h1>Procurement Dashboard</h1>
+        <div class="meta">Nahraj Excel nebo CSV — data se zpracují lokálně v prohlížeči.</div>
+      </div>
+    </div>
+    <div class="meta" id="fileInfo">Žádný soubor</div>
+  </header>
+
+  <!-- Upload panel -->
+  <section class="panel" id="uploadPanel">
+    <label for="fileInput" class="drop" id="dropZone">
+      <input id="fileInput" type="file" accept=".xlsx,.xls,.csv" />
+      <p><strong>Přetáhni soubor sem</strong> nebo klikni pro výběr</p>
+      <p class="hint">Podporované formáty: .xlsx, .xls, .csv · Soubor se nikam neodesílá.</p>
+    </label>
+    <div id="uploadError" class="error hidden" style="margin-top:12px"></div>
+  </section>
+
+  <!-- Workspace (hidden until file loaded) -->
+  <section id="workspace" class="hidden">
+
+    <!-- Sheet selector + column inspector -->
+    <div class="panel">
+      <div class="toolbar">
+        <div class="field">
+          <label for="sheetSelect">List</label>
+          <select id="sheetSelect"></select>
+        </div>
+        <div class="field" style="flex:1; min-width: 280px;">
+          <label>Detekované sloupce</label>
+          <div id="columnChips" class="cols"></div>
+        </div>
+        <div class="right">
+          <button class="btn" id="resetBtn">Nahrát jiný soubor</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="panel">
+      <div class="toolbar">
+        <div class="field">
+          <label for="dimensionSelect">Rozpad podle</label>
+          <select id="dimensionSelect"></select>
+        </div>
+        <div class="field">
+          <label for="metricSelect">Metrika</label>
+          <select id="metricSelect"></select>
+        </div>
+        <div class="field">
+          <label for="aggSelect">Agregace</label>
+          <select id="aggSelect">
+            <option value="sum">Součet</option>
+            <option value="avg">Průměr</option>
+            <option value="count">Počet</option>
+            <option value="min">Min</option>
+            <option value="max">Max</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="topNSelect">Top N</label>
+          <select id="topNSelect">
+            <option value="5">Top 5</option>
+            <option value="10" selected>Top 10</option>
+            <option value="20">Top 20</option>
+            <option value="0">Vše</option>
+          </select>
+        </div>
+        <div class="field" style="flex:1; min-width: 200px;">
+          <label for="searchInput">Filtr (text)</label>
+          <input id="searchInput" type="text" placeholder="hledat ve všech sloupcích…" />
+        </div>
+      </div>
+    </div>
+
+    <!-- KPI row -->
+    <div class="row kpi" id="kpiRow"></div>
+
+    <!-- Charts row -->
+    <div class="row charts" style="margin-top:16px">
+      <div class="panel">
+        <h2 id="barTitle">Sloupcový graf</h2>
+        <div class="chart-wrap"><canvas id="barChart"></canvas></div>
+      </div>
+      <div class="panel">
+        <h2 id="pieTitle">Podíl</h2>
+        <div class="chart-wrap small"><canvas id="pieChart"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Trend chart (only if date column detected) -->
+    <div class="panel hidden" id="trendPanel" style="margin-top:16px">
+      <div class="toolbar" style="margin-bottom:8px">
+        <h2 style="margin-right:auto">Trend v čase</h2>
+        <div class="field">
+          <label for="dateSelect">Sloupec data</label>
+          <select id="dateSelect"></select>
+        </div>
+        <div class="field">
+          <label for="granSelect">Granularita</label>
+          <select id="granSelect">
+            <option value="month" selected>Měsíc</option>
+            <option value="quarter">Kvartál</option>
+            <option value="year">Rok</option>
+          </select>
+        </div>
+      </div>
+      <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
+    </div>
+
+    <!-- Data table -->
+    <div class="panel" style="margin-top:16px">
+      <h2 style="margin-bottom:8px">Data</h2>
+      <div id="dataTable"></div>
+    </div>
+
+  </section>
+
+  <footer>Vše běží lokálně v prohlížeči. Žádná data neopouštějí tvůj počítač.</footer>
+</div>
+
+<!-- Libs -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
+
+<script>
+/* ===========================================================
+   State
+=========================================================== */
+const state = {
+  workbook: null,
+  sheetName: null,
+  rows: [],          // array of objects keyed by header
+  headers: [],       // array of strings
+  types: {},         // header -> 'number' | 'date' | 'text'
+  samples: {},       // header -> array of sample non-empty values
+  charts: {},        // chart instances
+  grid: null,
+};
+
+/* ===========================================================
+   Helpers
+=========================================================== */
+const fmtNum = (n) => {
+  if (n === null || n === undefined || isNaN(n)) return '–';
+  const abs = Math.abs(n);
+  if (abs >= 1e9) return (n/1e9).toFixed(2) + ' mld';
+  if (abs >= 1e6) return (n/1e6).toFixed(2) + ' M';
+  if (abs >= 1e3) return (n/1e3).toFixed(1) + ' tis.';
+  return new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 }).format(n);
+};
+const fmtNumFull = (n) => {
+  if (n === null || n === undefined || isNaN(n)) return '–';
+  return new Intl.NumberFormat('cs-CZ', { maximumFractionDigits: 2 }).format(n);
+};
+const isNumericLike = (v) => {
+  if (v === null || v === undefined || v === '') return false;
+  if (typeof v === 'number') return Number.isFinite(v);
+  if (typeof v !== 'string') return false;
+  const s = v.replace(/\s/g, '').replace(',', '.');
+  if (s === '' || s === '-' || s === '+') return false;
+  return !isNaN(Number(s));
+};
+const toNumber = (v) => {
+  if (typeof v === 'number') return v;
+  if (typeof v !== 'string') return NaN;
+  return Number(v.replace(/\s/g, '').replace(',', '.'));
+};
+const isDateLike = (v) => {
+  if (v instanceof Date) return !isNaN(v.getTime());
+  if (typeof v === 'number') {
+    // Excel serial date heuristic: between 1900-01-01 and 2100-01-01 in days
+    return v > 20000 && v < 80000;
+  }
+  if (typeof v !== 'string') return false;
+  // Try common formats
+  const s = v.trim();
+  if (!/[\d]/.test(s)) return false;
+  const t = Date.parse(s);
+  if (!isNaN(t)) return true;
+  // dd.mm.yyyy
+  return /^\d{1,2}[.\/-]\d{1,2}[.\/-]\d{2,4}$/.test(s);
+};
+const toDate = (v) => {
+  if (v instanceof Date) return v;
+  if (typeof v === 'number') {
+    // Excel serial → JS date
+    const utcDays  = Math.floor(v - 25569);
+    const utcValue = utcDays * 86400 * 1000;
+    return new Date(utcValue);
+  }
+  if (typeof v === 'string') {
+    const s = v.trim();
+    const m = s.match(/^(\d{1,2})[.\/-](\d{1,2})[.\/-](\d{2,4})$/);
+    if (m) {
+      let [_, d, mo, y] = m;
+      if (y.length === 2) y = '20' + y;
+      return new Date(Number(y), Number(mo) - 1, Number(d));
+    }
+    const t = Date.parse(s);
+    if (!isNaN(t)) return new Date(t);
+  }
+  return null;
+};
+const detectTypes = (rows, headers) => {
+  const types = {}; const samples = {};
+  for (const h of headers) {
+    const vals = [];
+    for (const r of rows) {
+      const v = r[h];
+      if (v !== null && v !== undefined && v !== '') vals.push(v);
+      if (vals.length >= 30) break;
+    }
+    samples[h] = vals.slice(0, 5);
+    if (vals.length === 0) { types[h] = 'text'; continue; }
+    const numShare = vals.filter(isNumericLike).length / vals.length;
+    const dateShare = vals.filter(isDateLike).length / vals.length;
+    if (numShare >= 0.8 && dateShare < numShare) types[h] = 'number';
+    else if (dateShare >= 0.7) types[h] = 'date';
+    else types[h] = 'text';
+  }
+  return { types, samples };
+};
+
+/* ===========================================================
+   File handling
+=========================================================== */
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+const uploadError = document.getElementById('uploadError');
+
+['dragenter','dragover'].forEach(ev => dropZone.addEventListener(ev, e => {
+  e.preventDefault(); e.stopPropagation();
+  dropZone.classList.add('dragover');
+}));
+['dragleave','drop'].forEach(ev => dropZone.addEventListener(ev, e => {
+  e.preventDefault(); e.stopPropagation();
+  dropZone.classList.remove('dragover');
+}));
+dropZone.addEventListener('drop', (e) => {
+  const f = e.dataTransfer?.files?.[0];
+  if (f) handleFile(f);
+});
+fileInput.addEventListener('change', e => {
+  const f = e.target.files?.[0];
+  if (f) handleFile(f);
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  state.workbook = null; state.sheetName = null; state.rows = []; state.headers = [];
+  state.types = {}; state.samples = {};
+  Object.values(state.charts).forEach(c => c && c.destroy());
+  state.charts = {};
+  fileInput.value = '';
+  document.getElementById('workspace').classList.add('hidden');
+  document.getElementById('uploadPanel').classList.remove('hidden');
+  document.getElementById('fileInfo').textContent = 'Žádný soubor';
+  uploadError.classList.add('hidden');
+});
+
+function showError(msg) {
+  uploadError.textContent = msg;
+  uploadError.classList.remove('hidden');
+}
+
+function handleFile(file) {
+  uploadError.classList.add('hidden');
+  const name = file.name.toLowerCase();
+  const ok = name.endsWith('.xlsx') || name.endsWith('.xls') || name.endsWith('.csv');
+  if (!ok) { showError('Nepodporovaný formát. Použij .xlsx, .xls nebo .csv.'); return; }
+  document.getElementById('fileInfo').textContent = file.name;
+  const reader = new FileReader();
+  reader.onerror = () => showError('Soubor se nepodařilo načíst.');
+  reader.onload = (e) => {
+    try {
+      const data = new Uint8Array(e.target.result);
+      const wb = XLSX.read(data, { type: 'array', cellDates: true });
+      state.workbook = wb;
+      const sheetSelect = document.getElementById('sheetSelect');
+      sheetSelect.innerHTML = '';
+      wb.SheetNames.forEach(n => {
+        const opt = document.createElement('option');
+        opt.value = n; opt.textContent = n;
+        sheetSelect.appendChild(opt);
+      });
+      loadSheet(wb.SheetNames[0]);
+      document.getElementById('uploadPanel').classList.add('hidden');
+      document.getElementById('workspace').classList.remove('hidden');
+    } catch (err) {
+      console.error(err);
+      showError('Chyba při čtení souboru: ' + err.message);
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+document.getElementById('sheetSelect').addEventListener('change', e => loadSheet(e.target.value));
+
+function loadSheet(sheetName) {
+  state.sheetName = sheetName;
+  const ws = state.workbook.Sheets[sheetName];
+  const rows = XLSX.utils.sheet_to_json(ws, { defval: '', raw: false });
+  const headers = rows.length ? Object.keys(rows[0]) : [];
+  // Drop fully empty columns
+  const nonEmpty = headers.filter(h => rows.some(r => r[h] !== '' && r[h] !== null && r[h] !== undefined));
+  state.headers = nonEmpty;
+  state.rows = rows;
+  const det = detectTypes(rows, nonEmpty);
+  state.types = det.types; state.samples = det.samples;
+  renderColumnChips();
+  populatePickers();
+  rerender();
+}
+
+/* ===========================================================
+   UI render
+=========================================================== */
+function renderColumnChips() {
+  const wrap = document.getElementById('columnChips');
+  wrap.innerHTML = '';
+  state.headers.forEach(h => {
+    const t = state.types[h];
+    const chip = document.createElement('span');
+    chip.className = 'col-chip ' + (t === 'number' ? 'num' : t === 'date' ? 'date' : 'text');
+    const typeLabel = t === 'number' ? 'číslo' : t === 'date' ? 'datum' : 'text';
+    chip.innerHTML = `${h}<span class="type">${typeLabel}</span>`;
+    chip.title = 'Ukázka: ' + (state.samples[h] || []).slice(0,3).join(', ');
+    wrap.appendChild(chip);
+  });
+}
+
+function populatePickers() {
+  const dim = document.getElementById('dimensionSelect');
+  const met = document.getElementById('metricSelect');
+  const dateSel = document.getElementById('dateSelect');
+  dim.innerHTML = ''; met.innerHTML = ''; dateSel.innerHTML = '';
+
+  const textCols = state.headers.filter(h => state.types[h] === 'text');
+  const numCols  = state.headers.filter(h => state.types[h] === 'number');
+  const dateCols = state.headers.filter(h => state.types[h] === 'date');
+
+  (textCols.length ? textCols : state.headers).forEach(h => {
+    const o = document.createElement('option'); o.value = h; o.textContent = h; dim.appendChild(o);
+  });
+  (numCols.length ? numCols : state.headers).forEach(h => {
+    const o = document.createElement('option'); o.value = h; o.textContent = h; met.appendChild(o);
+  });
+  dateCols.forEach(h => {
+    const o = document.createElement('option'); o.value = h; o.textContent = h; dateSel.appendChild(o);
+  });
+
+  document.getElementById('trendPanel').classList.toggle('hidden', dateCols.length === 0);
+}
+
+['dimensionSelect','metricSelect','aggSelect','topNSelect','searchInput','dateSelect','granSelect']
+  .forEach(id => document.getElementById(id).addEventListener('input', rerender));
+
+function filteredRows() {
+  const q = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+  if (!q) return state.rows;
+  return state.rows.filter(r => state.headers.some(h => String(r[h] ?? '').toLowerCase().includes(q)));
+}
+
+function aggregate(rows, dim, metric, agg) {
+  const m = new Map();
+  for (const r of rows) {
+    const key = String(r[dim] ?? '(prázdné)');
+    const val = state.types[metric] === 'number' ? toNumber(r[metric]) : NaN;
+    if (!m.has(key)) m.set(key, { sum: 0, count: 0, min: +Infinity, max: -Infinity, hasNum: false });
+    const o = m.get(key);
+    o.count += 1;
+    if (Number.isFinite(val)) {
+      o.sum += val; o.hasNum = true;
+      if (val < o.min) o.min = val;
+      if (val > o.max) o.max = val;
+    }
+  }
+  const out = [];
+  for (const [k, o] of m.entries()) {
+    let v;
+    switch (agg) {
+      case 'count': v = o.count; break;
+      case 'avg':   v = o.hasNum ? o.sum / o.count : 0; break;
+      case 'min':   v = o.hasNum ? o.min : 0; break;
+      case 'max':   v = o.hasNum ? o.max : 0; break;
+      case 'sum':
+      default:      v = o.sum;
+    }
+    out.push({ key: k, value: v });
+  }
+  out.sort((a,b) => b.value - a.value);
+  return out;
+}
+
+function renderKpis(rows) {
+  const wrap = document.getElementById('kpiRow');
+  wrap.innerHTML = '';
+  const metric = document.getElementById('metricSelect').value;
+  const dim = document.getElementById('dimensionSelect').value;
+
+  const card = (label, value, sub='') => {
+    const el = document.createElement('div');
+    el.className = 'panel kpi-card';
+    el.innerHTML = `<div class="label">${label}</div><div class="value">${value}</div>${sub ? `<div class="sub">${sub}</div>`:''}`;
+    wrap.appendChild(el);
+  };
+
+  card('Počet řádků', fmtNumFull(rows.length));
+  if (dim) {
+    const uniq = new Set(rows.map(r => r[dim])).size;
+    card('Unikátních ' + dim, fmtNumFull(uniq));
+  }
+  if (metric && state.types[metric] === 'number') {
+    const nums = rows.map(r => toNumber(r[metric])).filter(Number.isFinite);
+    const sum = nums.reduce((a,b)=>a+b,0);
+    const avg = nums.length ? sum / nums.length : 0;
+    card('Součet ' + metric, fmtNum(sum), 'celkem ' + fmtNumFull(sum));
+    card('Průměr ' + metric, fmtNum(avg));
+    if (nums.length) {
+      card('Min ' + metric, fmtNum(Math.min(...nums)));
+      card('Max ' + metric, fmtNum(Math.max(...nums)));
+    }
+  }
+}
+
+function renderBar(rows) {
+  const dim = document.getElementById('dimensionSelect').value;
+  const metric = document.getElementById('metricSelect').value;
+  const agg = document.getElementById('aggSelect').value;
+  const topN = Number(document.getElementById('topNSelect').value || 10);
+  document.getElementById('barTitle').textContent = `${aggLabel(agg)} ${metric || ''} podle ${dim || ''}`.trim();
+
+  let data = aggregate(rows, dim, metric, agg);
+  if (topN > 0) data = data.slice(0, topN);
+
+  const ctx = document.getElementById('barChart');
+  if (state.charts.bar) state.charts.bar.destroy();
+  state.charts.bar = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: data.map(d => d.key),
+      datasets: [{
+        label: aggLabel(agg) + ' ' + (metric || ''),
+        data: data.map(d => d.value),
+        backgroundColor: '#2563eb',
+        borderRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: (c) => fmtNumFull(c.parsed.y) } } },
+      scales: { y: { ticks: { callback: (v) => fmtNum(v) }, grid: { color: '#eef2f7' } }, x: { grid: { display: false } } }
+    }
+  });
+}
+
+function renderPie(rows) {
+  const dim = document.getElementById('dimensionSelect').value;
+  const metric = document.getElementById('metricSelect').value;
+  const agg = document.getElementById('aggSelect').value;
+  document.getElementById('pieTitle').textContent = `Podíl: ${dim || ''} (${aggLabel(agg)} ${metric || ''})`;
+
+  let data = aggregate(rows, dim, metric, agg).slice(0, 8);
+  const total = data.reduce((a,b)=>a+b.value,0);
+  const ctx = document.getElementById('pieChart');
+  if (state.charts.pie) state.charts.pie.destroy();
+  state.charts.pie = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: data.map(d => d.key),
+      datasets: [{
+        data: data.map(d => d.value),
+        backgroundColor: ['#2563eb','#7c3aed','#0891b2','#16a34a','#d97706','#dc2626','#0f172a','#64748b'],
+        borderWidth: 0,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout: '60%',
+      plugins: {
+        legend: { position: 'right', labels: { boxWidth: 10 } },
+        tooltip: { callbacks: { label: (c) => `${c.label}: ${fmtNumFull(c.parsed)} (${total ? ((c.parsed/total)*100).toFixed(1) : 0} %)` } }
+      }
+    }
+  });
+}
+
+function renderTrend(rows) {
+  const dateCol = document.getElementById('dateSelect').value;
+  const metric = document.getElementById('metricSelect').value;
+  const gran = document.getElementById('granSelect').value;
+  if (!dateCol) return;
+
+  const bucket = (d) => {
+    if (gran === 'year') return String(d.getFullYear());
+    if (gran === 'quarter') return d.getFullYear() + ' Q' + (Math.floor(d.getMonth()/3)+1);
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
+  };
+
+  const m = new Map();
+  for (const r of rows) {
+    const d = toDate(r[dateCol]);
+    if (!d) continue;
+    const k = bucket(d);
+    const v = state.types[metric] === 'number' ? toNumber(r[metric]) : 1;
+    m.set(k, (m.get(k) || 0) + (Number.isFinite(v) ? v : 0));
+  }
+  const keys = [...m.keys()].sort();
+  const ctx = document.getElementById('trendChart');
+  if (state.charts.trend) state.charts.trend.destroy();
+  state.charts.trend = new Chart(ctx, {
+    type: 'line',
+    data: { labels: keys, datasets: [{ label: metric || 'Hodnota', data: keys.map(k => m.get(k)), borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,.12)', fill: true, tension: .25 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { ticks: { callback: (v) => fmtNum(v) }, grid: { color: '#eef2f7' } }, x: { grid: { display: false } } }
+    }
+  });
+}
+
+function renderTable(rows) {
+  const container = document.getElementById('dataTable');
+  container.innerHTML = '';
+  state.grid = new gridjs.Grid({
+    columns: state.headers.map(h => ({ name: h, sort: true })),
+    data: rows.map(r => state.headers.map(h => r[h] ?? '')),
+    search: false,        // we have our own search box
+    pagination: { limit: 25 },
+    resizable: true,
+    autoWidth: true,
+    style: { table: { 'white-space': 'nowrap' } }
+  }).render(container);
+}
+
+function aggLabel(a) {
+  return { sum: 'Součet', avg: 'Průměr', count: 'Počet', min: 'Min', max: 'Max' }[a] || a;
+}
+
+function rerender() {
+  const rows = filteredRows();
+  renderKpis(rows);
+  renderBar(rows);
+  renderPie(rows);
+  renderTrend(rows);
+  renderTable(rows);
+}
+</script>
+</body>
+</html>

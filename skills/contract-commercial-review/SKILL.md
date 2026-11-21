@@ -1,3 +1,8 @@
+---
+name: contract-commercial-review
+description: Use this skill when the user's request involves contract commercial review. Trigger phrases include: "contract review", "commercial review", "obchodní podmínky", "smlouva", "dodavatelská smlouva", "rámcová smlouva", "kupní smlouva", "Incoterms", "payment terms", "platební podmínky", "price validity", "cenová platnost".
+---
+
 # Skill: Contract Commercial Review
 
 ## Purpose

@@ -1,3 +1,8 @@
+---
+name: rfq-rfp
+description: Use this skill when the user's request involves rfq / rfp preparation. Trigger phrases include: "rfq", "rfp", "poptávka", "výběrové řízení", "dodavatelská nabídka", "tendr".
+---
+
 # Skill: RFQ / RFP Preparation
 
 ## Purpose

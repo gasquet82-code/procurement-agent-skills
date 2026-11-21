@@ -1,3 +1,8 @@
+---
+name: supplier-productivity
+description: "Use when preparing an annual productivity or cost-reduction request to suppliers. Trigger phrases: \"produktivita\", \"požadavek na produktivitu\", \"roční snížení cen\", \"cost reduction\", \"productivity request\", \"annual price review\", \"úspory u dodavatelů\"."
+---
+
 # Skill: Supplier Productivity
 
 ## Purpose

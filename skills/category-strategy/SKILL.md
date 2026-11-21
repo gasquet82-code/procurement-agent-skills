@@ -1,3 +1,8 @@
+---
+name: category-strategy
+description: Use this skill when the user's request involves procurement category strategy. Trigger phrases include: "strategie kategorie", "category strategy", "dodavatelský mix", "spend", "rizika dodavatelů", "nákupní strategie".
+---
+
 # Skill: Procurement Category Strategy
 
 ## Purpose

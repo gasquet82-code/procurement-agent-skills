@@ -1,3 +1,8 @@
+---
+name: supplier-scorecard
+description: Use this skill when the user's request involves supplier scorecard. Trigger phrases include: "supplier scorecard", "supplier evaluation", "supplier performance", "supplier rating", "supplier KPI", "supplier review", "vendor evaluation", "OTIF", "complaints", "reklamace", "lead time", "quality performance".
+---
+
 # Skill: Supplier Scorecard
 
 ## Purpose

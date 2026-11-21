@@ -1,3 +1,8 @@
+---
+name: email-procurement-analysis
+description: Use this skill when the user's request involves email procurement analysis. Trigger phrases include: "email", "e-mail", "supplier email", "odpověď dodavatele", "rfq response", "price offer", "delivery confirmation", "delay notification", "complaint email", "supplier escalation", "price increase notice", "meeting follow-up".
+---
+
 # Skill: Email Procurement Analysis
 
 ## Purpose

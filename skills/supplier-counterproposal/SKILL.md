@@ -1,3 +1,8 @@
+---
+name: supplier-counterproposal
+description: Use this skill when the user's request involves supplier counterproposal. Trigger phrases include: "supplier counterproposal", "counteroffer", "counterproposal", "odpověď dodavateli", "protinávrh", "vyjednávací e-mail", "supplier response", "response to quotation", "response to commercial terms", "contract comments to supplier", "požadované změny podmínek", "negotiation email".
+---
+
 # Skill: Supplier Counterproposal
 
 ## Purpose

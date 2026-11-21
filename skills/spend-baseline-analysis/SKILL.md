@@ -1,3 +1,8 @@
+---
+name: spend-baseline-analysis
+description: Use this skill when the user's request involves spend baseline analysis. Trigger phrases include: "spend baseline", "annual spend", "roční spend", "spend analysis", "nákupní data", "baseline", "savings baseline", "top suppliers", "top items", "unmanaged spend".
+---
+
 # Skill: Spend Baseline Analysis
 
 ## Purpose

@@ -1,3 +1,8 @@
+---
+name: tco-analysis
+description: Use this skill when the user's request involves total cost of ownership analysis. Trigger phrases include: "tco", "celkové náklady", "landed cost", "doprava", "fx", "měnový kurz", "objemový scénář".
+---
+
 # Skill: Total Cost of Ownership Analysis
 
 ## Purpose

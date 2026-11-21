@@ -1,3 +1,8 @@
+---
+name: negotiation-brief
+description: Use this skill when the user's request involves supplier negotiation brief. Trigger phrases include: "vyjednávání", "argumenty", "cílová cena", "batna", "kontrakt", "sleva", "negotiation".
+---
+
 # Skill: Supplier Negotiation Brief
 
 ## Purpose
