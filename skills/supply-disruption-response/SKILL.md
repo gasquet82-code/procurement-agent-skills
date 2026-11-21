@@ -1,3 +1,8 @@
+---
+name: supply-disruption-response
+description: "Use when a supplier delivery is delayed or supply is disrupted and customers or production are at risk. Trigger phrases: \"zpoždění dodávky\", \"dodavatel nestíhá\", \"zákazník čeká\", \"narušení dodávek\", \"supply disruption\", \"delivery delay\", \"expedite\"."
+---
+
 # Skill: Supply Disruption Response
 
 ## Purpose

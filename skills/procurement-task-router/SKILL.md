@@ -1,3 +1,8 @@
+---
+name: procurement-task-router
+description: Use this skill when the user's request involves procurement task router. Trigger phrases include: "procurement task", "task router", "jaký skill použít", "použij správné skilly", "kombinuj skilly", "orchestration", "routing", "analyzuj zadání", "vyber skill", "komplexní procurement úkol", "procurement workflow", "procurement copilot".
+---
+
 # Skill: Procurement Task Router
 
 ## Purpose

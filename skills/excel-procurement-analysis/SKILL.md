@@ -1,3 +1,8 @@
+---
+name: excel-procurement-analysis
+description: Use this skill when the user's request involves excel procurement analysis. Trigger phrases include: "excel", "spreadsheet", "ceník", "rfq matrix", "price list", "spend data", "supplier list", "purchase order data", "invoice data", "tco model", "scorecard data", "savings tracker".
+---
+
 # Skill: Excel Procurement Analysis
 
 ## Purpose

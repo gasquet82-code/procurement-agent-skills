@@ -1,3 +1,8 @@
+---
+name: supplier-rebate
+description: "Use when designing, negotiating, calculating or tracking a supplier volume or turnover rebate. Trigger phrases: \"obratový bonus\", \"odběrový bonus\", \"volume rebate\", \"rebate\", \"bonus za odběr\", \"bonusová pásma\", \"vyúčtování bonusu\"."
+---
+
 # Skill: Supplier Rebate
 
 ## Purpose

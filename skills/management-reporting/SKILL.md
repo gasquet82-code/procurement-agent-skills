@@ -1,3 +1,8 @@
+---
+name: management-reporting
+description: Use this skill when the user's request involves management procurement reporting. Trigger phrases include: "management", "board", "report", "měsíční přehled", "úspory", "rizika", "prezentace".
+---
+
 # Skill: Management Procurement Reporting
 
 ## Purpose

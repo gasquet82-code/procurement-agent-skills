@@ -1,3 +1,7 @@
+---
+name: supplier-portfolio-review
+description: Use this skill when the user's request involves supplier portfolio review. Trigger phrases include: "supplier portfolio", "supplier base", "supplier mix", "dodavatelské portfolio", "dodavatelská báze", "supplier consolidation", "konsolidace dodavatelů", "dual sourcing", "single sourcing", "supplier dependency", "supplier map".
+---
 
 # Skill: Supplier Portfolio Review
 

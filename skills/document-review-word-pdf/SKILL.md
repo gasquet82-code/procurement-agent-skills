@@ -1,3 +1,8 @@
+---
+name: document-review-word-pdf
+description: Use this skill when the user's request involves document review word pdf. Trigger phrases include: "document review", "word review", "pdf review", "review document", "analyzuj dokument", "zkontroluj dokument", "word", "pdf", "dodavatelská nabídka", "technická specifikace", "obchodní podmínky", "certifikát".
+---
+
 # Skill: Document Review Word PDF
 
 ## Purpose

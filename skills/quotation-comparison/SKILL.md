@@ -1,3 +1,8 @@
+---
+name: quotation-comparison
+description: Use this skill when the user's request involves supplier quotation comparison. Trigger phrases include: "porovnej nabídky", "cenové srovnání", "nabídky dodavatelů", "supplier comparison", "quotation", "cenová nabídka".
+---
+
 # Skill: Supplier Quotation Comparison
 
 ## Purpose

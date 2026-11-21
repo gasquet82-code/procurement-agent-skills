@@ -1,0 +1,12 @@
+{
+  "name": "procurement-agent-skills",
+  "owner": { "name": "Ondro Gasquet" },
+  "metadata": { "description": "Procurement agent Nestor — synced from GitHub." },
+  "plugins": [
+    {
+      "name": "procurement-agent",
+      "source": "./",
+      "description": "Universal procurement agent (Nestor) with 22 procurement skills. Czech output, employer-portable."
+    }
+  ]
+}

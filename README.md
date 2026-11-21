@@ -76,3 +76,12 @@ Start with these workflows:
 3. Calculate total cost impact.
 4. Prepare negotiation brief.
 5. Create management-ready procurement summary.
+
+## Installation as a Claude plugin (auto-sync from GitHub)
+
+This repository is also a Claude plugin marketplace.
+
+- **Claude app (Customize → Plugins):** Add marketplace `gasquet82-code/procurement-agent-skills`, install `procurement-agent`, turn on *Sync automatically*.
+- **Claude Code:** `/plugin install procurement-agent --marketplace gasquet82-code/procurement-agent-skills`
+
+Bump `version` in `.claude-plugin/plugin.json` when releasing changes, so clients pick up the update.

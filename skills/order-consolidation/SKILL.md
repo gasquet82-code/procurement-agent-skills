@@ -1,3 +1,8 @@
+---
+name: order-consolidation
+description: "Use when customer orders wait for parts from several suppliers and need prioritization, partial vs. complete shipment decisions or stock allocation. Trigger phrases: \"kompletace zakázek\", \"zákazník čeká na kompletní dodávku\", \"chybějící položky\", \"částečná expedice\", \"backlog\"."
+---
+
 # Skill: Order Consolidation
 
 ## Purpose
