@@ -69,6 +69,9 @@ Supporting skills depending on content:
 - Contract Commercial Review
 - Supplier Quotation Comparison
 - Negotiation Brief
+- Supply Disruption Response
+- Supplier Productivity
+- Supplier Rebate
 
 Use when the input contains:
 
@@ -79,6 +82,8 @@ Use when the input contains:
 - complaint,
 - negotiation message,
 - supplier escalation.
+
+If the email reports a delay, partial delivery, quality block or other supply disruption that puts customer orders or stock at risk, hand over to Supply Disruption Response after extracting the facts.
 
 ### Word / PDF / document input
 
@@ -239,6 +244,111 @@ Use when the user asks to:
 - build supplier response matrix,
 - define evaluation criteria.
 
+### Supply disruption / delivery delay
+
+Primary skill:
+
+- Supply Disruption Response
+
+Supporting skills:
+
+- Email Procurement Analysis
+- Transport Mode Selection
+- Order Consolidation
+- Supplier Scorecard
+- Supplier Counterproposal
+- Contract Commercial Review
+
+Use when the user mentions:
+
+- delivery delay,
+- supplier cannot meet the date,
+- customer is waiting,
+- partial delivery,
+- quality block,
+- capacity shortfall or allocation,
+- force majeure,
+- expedite.
+
+### Transport / logistics decision
+
+Primary skill:
+
+- Transport Mode Selection
+
+Supporting skills:
+
+- TCO Analysis
+- Supply Disruption Response
+- Order Consolidation
+
+Use when the user asks:
+
+- which transport mode to use,
+- container vs. pallet vs. parcel vs. express vs. air,
+- whether expediting pays off,
+- whether to split a shipment,
+- who pays for expedited transport.
+
+### Customer order completion
+
+Primary skill:
+
+- Order Consolidation
+
+Supporting skills:
+
+- Excel Procurement Analysis
+- Supply Disruption Response
+- Transport Mode Selection
+
+Use when the user mentions:
+
+- kompletace zakázek,
+- customer waiting for a complete delivery,
+- open orders with missing lines,
+- partial vs. complete shipment,
+- allocation of scarce stock between customers.
+
+### Annual supplier productivity
+
+Primary skill:
+
+- Supplier Productivity
+
+Supporting skills:
+
+- Spend Baseline Analysis
+- Supplier Portfolio Review
+- Negotiation Brief
+- Supplier Counterproposal
+
+Use when the user asks for:
+
+- annual productivity request,
+- year-on-year price reduction,
+- cost-down program,
+- annual price review.
+
+### Supplier rebate
+
+Primary skill:
+
+- Supplier Rebate
+
+Supporting skills:
+
+- Contract Commercial Review
+- Negotiation Brief
+- Excel Procurement Analysis
+
+Use when the user asks about:
+
+- volume or turnover rebate (obratový / odběrový bonus),
+- rebate tiers,
+- rebate vs. discount,
+- rebate settlement or tracking.
+
 ## Multi-skill examples
 
 ### Example 1: Excel RFQ matrix
@@ -299,6 +409,44 @@ Use:
 1. Supplier Scorecard
 2. Supplier Portfolio Review
 3. Management Procurement Reporting if management decision is required
+
+### Example 6: Supplier delay, customer waiting
+
+Input:
+Supplier emails that a delivery will be three weeks late; a key customer is waiting for the parts.
+
+Use:
+
+1. Email Procurement Analysis
+2. Supply Disruption Response
+3. Transport Mode Selection if expediting is considered
+4. Order Consolidation if the customer order contains parts from several suppliers
+5. Supplier Scorecard to record the incident
+
+### Example 7: Customer orders waiting for completion
+
+Input:
+User provides an open order list where customer orders wait for missing lines from several suppliers.
+
+Use:
+
+1. Excel Procurement Analysis
+2. Order Consolidation
+3. Supply Disruption Response for late suppliers on blocking lines
+4. Transport Mode Selection for urgent blocking lines
+
+### Example 8: Annual supplier negotiation
+
+Input:
+User prepares the yearly negotiation with top suppliers.
+
+Use:
+
+1. Spend Baseline Analysis
+2. Supplier Productivity
+3. Supplier Rebate
+4. Negotiation Brief
+5. Supplier Counterproposal for the supplier letters
 
 ## Output mode routing
 
